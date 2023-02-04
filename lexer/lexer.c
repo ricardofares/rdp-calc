@@ -132,6 +132,12 @@ next_id();
 static struct token *
 make_number(double value);
 
+/**
+ * It skips all characters until find a newline.
+ */
+static void
+skip_line();
+
 /* Function Definition */
 
 void
@@ -164,6 +170,10 @@ next_token() {
 
     /* It returns the `EOF` token */
     if (peek_char() == '\0') return make_token(LEXER_TOKEN_EOF);
+
+    /* It skips one or more line comments */
+    while (peek_char() == '#')
+        skip_line();
 
     /* It peeks the next character to be analyzed */
     const char c = peek_char();
@@ -333,4 +343,10 @@ make_number(double value) {
     token->metadata.value = value;
 
     return token;
+}
+
+inline static void
+skip_line() {
+    while (peek_char() != '\n') skip(1);
+    skip(1); /* Skip the '\n' */
 }
