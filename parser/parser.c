@@ -118,12 +118,6 @@ void parse() {
     printf("Value: %lf.\n", value);
 }
 
-/**
- * It parses the following production rule (in BNF-notation).
- *
- *      <S> ::= { $id = <expr> ; } <expr>
- *
- */
 static double
 S() {
     while (TOKEN_TYPE() == LEXER_TOKEN_DOLLAR) {
@@ -248,7 +242,7 @@ factor() {
         /* It checks if there is no mapping to a value */
         /* for the specified identifier */
         if (!p)
-            PARSE_ERROR("Use of undeclared varaible %s.\n", id);
+            PARSE_ERROR("Use of undeclared variable %s.\n", id);
 
         return *p;
     }
