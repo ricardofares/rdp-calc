@@ -26,19 +26,13 @@ it is not explicited how the user should choose which one to use and, therefore,
 | Subtract   | -         | **X**                    |
 | Multiply   | *         | **X**                    |
 | Divide     | /         | **X**                    |
-| Pow        | **X**     | **pow**                  |
+| Pow        | **        | **X**                    |
 | Factorial  | []        | **X**                    |
 
 <p align="center"><b>Table 1:</b> Supported mathematical operations showing the respective its symbol or function name.</p>
 <p align="center"><b>X</b>: Indicates absence.</p>
 
 </div>
-
-#### :bell: Example of Function Named Mathematical Operations Usage
-An example of a mathematical operation that there is no symbol in our calculator is the **pow**. This function when used inside our calculator
-satisfies the following mathematical expression.
-
-$$\text{pow}(a, b) = a^b, \quad a, b \in \mathbb{R} \cup \\{ -\infty, +\infty \\}$$
 
 ### Mathematical Constants
 The **mathematical constants** it is always represente by its name. Therefore, the following table show the supported mathematical constants.
@@ -93,17 +87,3 @@ Otherwise, if you would like to execute our calculator taken as input the *stand
 <p align="center"><i>./rdp_calc</i></p>
 
 After that, have fun!
-
-## :notebook: Future Features
-This section provides the future features that may be added into the calculator.
-
-#### Variables Support
-The user can *declare* and *attribute* a value to a variable and use it in another places. An example of such usage may be.
-
-```
-a = 1 + 2 + 3 + 4;
-a + 5
-```
-
-The previous code section indicates the sum of the first five natural numbers, supposing $\mathbb{N} = \\{1, 2, 3, 4, \dots \\}$. Further, note that the
-last line of the code section does not end with *semicolon* to indicate that this is the result value.
