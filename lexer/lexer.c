@@ -46,17 +46,6 @@ DEFINE_CURRENT_TOKEN();
 /* Function Declaration */
 
 /**
- * It retrieves the next character to be analyzed in the buffer.
- * <p>
- * Further, note that this function does modify the character position
- * in the buffer.
- *
- * @return the next character to be analyzed in the buffer
- */
-static char
-next_char();
-
-/**
  * It retrieves the next character to be analyzed from the buffer,
  * without incrementing the character position in the buffer.
  *
@@ -80,13 +69,6 @@ skip(unsigned n);
  */
 static void
 mark();
-
-/**
- * It retracts by one the current character position in the
- * buffer.
- */
-static void
-retract();
 
 /**
  * It allocates a token structure containing the
@@ -224,11 +206,6 @@ next_token() {
 /* Static Function Declaration */
 
 inline static char
-next_char() {
-    return lexer.buf[lexer.pos++];
-}
-
-inline static char
 peek_char() {
     return lexer.buf[lexer.pos];
 }
@@ -236,11 +213,6 @@ peek_char() {
 inline static void
 skip(const unsigned n) {
     lexer.pos += n;
-}
-
-inline static void
-retract() {
-    lexer.pos--;
 }
 
 inline static void
