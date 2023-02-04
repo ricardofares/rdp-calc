@@ -26,11 +26,13 @@
 #include <math.h>
 
 #include "../lexer/lexer.h"
+#include "../util/hashtable.h"
 #include "./parser.h"
 
 /* Variables */
 
 extern struct token *curr_token;
+struct hashtable    *ht;
 
 /* Function Declaration */
 
@@ -45,6 +47,15 @@ extern struct token *curr_token;
  */
 static void
 match(unsigned type);
+
+/**
+ * It parses the following production rule (in BNF-notation).
+ *
+ *      <S> ::= { $id = <expr> ; } <expr>
+ *
+ */
+static double
+S();
 
 /**
  * It parses the following production rule (in BNF-notation).
@@ -77,7 +88,7 @@ base();
  * It parses the following production rule (in BNF-notation).
  *
  *      <factor> ::= number | + number | - number |
- *                  [<expr>] | '|' <expr> '|' | ( <expr> )
+ *                  [<expr>] | '|' <expr> '|' | ( <expr> ) | id
  *
  */
 static double
@@ -97,12 +108,38 @@ factorial(double x);
 /* Function Definition */
 
 void parse() {
+    ht = hashtable_new(10);
+
     NEXT_TOKEN();
 
-    double value = expr();
+    double value = S();
     match(LEXER_TOKEN_EOF);
 
     printf("Value: %lf.\n", value);
+}
+
+/**
+ * It parses the following production rule (in BNF-notation).
+ *
+ *      <S> ::= { $id = <expr> ; } <expr>
+ *
+ */
+static double
+S() {
+    while (TOKEN_TYPE() == LEXER_TOKEN_DOLLAR) {
+        char   *id;
+        double value;
+
+        match(LEXER_TOKEN_DOLLAR);
+        id = TOKEN_ID();
+        match(LEXER_TOKEN_ID);
+        match(LEXER_TOKEN_EQUALS);
+        value = expr();
+        hashtable_insert(ht, id, value);
+        match(LEXER_TOKEN_SEMICOLON);
+    }
+
+    return expr();
 }
 
 static double
@@ -200,6 +237,20 @@ factor() {
         const double value = fabs(expr());
         match(LEXER_TOKEN_PIPE);
         return value;
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_ID) {
+        const char *id = TOKEN_ID();
+        double     *p  = NULL;
+
+        match(LEXER_TOKEN_ID);
+
+        p = hashtable_find(ht, id);
+
+        /* It checks if there is no mapping to a value */
+        /* for the specified identifier */
+        if (!p)
+            PARSE_ERROR("Use of undeclared varaible %s.\n", id);
+
+        return *p;
     }
 
     printf("factor: Should not reach here!");

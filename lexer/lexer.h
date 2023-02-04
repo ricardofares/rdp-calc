@@ -61,12 +61,17 @@
 #define LEXER_TOKEN_LBRACKET         (0x9)
 #define LEXER_TOKEN_RBRACKET         (0xA)
 #define LEXER_TOKEN_PIPE             (0xB)
+#define LEXER_TOKEN_ID               (0xC)
+#define LEXER_TOKEN_EQUALS           (0xD)
+#define LEXER_TOKEN_DOLLAR           (0xE)
+#define LEXER_TOKEN_SEMICOLON        (0xF)
 
 #define DEFINE_LEXER() struct lexer lexer;
 #define DEFINE_CURRENT_TOKEN() struct token *curr_token;
 
 #define TOKEN_TYPE()  (curr_token->type)
 #define TOKEN_VALUE() (curr_token->metadata.value)
+#define TOKEN_ID()    (curr_token->metadata.id)
 #define NEXT_TOKEN()  (curr_token = next_token())
 
 /* Structure Definitions */
@@ -112,6 +117,7 @@ struct token {
      * It stores the token metadata.
      */
     union {
+        char  *id;
         double value;
     } metadata;
 };

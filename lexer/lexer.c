@@ -113,6 +113,15 @@ static struct token *
 next_number();
 
 /**
+ * It returns the next identifier identified from
+ * the buffer.
+ *
+ * @return the next identifier from the buffer
+ */
+static struct token *
+next_id();
+
+/**
  * It returns a number token containing the specified
  * value.
  *
@@ -164,8 +173,13 @@ next_token() {
     if (isdigit(c))
         return next_number();
 
+    /* It checks if the peeked character is a character */
+    /* Therefore, it tries to get the next identifier */
+    if (isalpha(c))
+        return next_id();
+
     switch (c) {
-        case '+': { skip(1); return make_token(LEXER_TOKEN_PLUS); }
+        case '+': { skip(1); return make_token(LEXER_TOKEN_PLUS);  }
         case '-': { skip(1); return make_token(LEXER_TOKEN_MINUS); }
         case '*': {
             skip(1);
@@ -175,12 +189,15 @@ next_token() {
 
             return make_token(LEXER_TOKEN_MULTIPLY);
         }
-        case '/': { skip(1); return make_token(LEXER_TOKEN_DIVIDE); }
-        case '(': { skip(1); return make_token(LEXER_TOKEN_LPAREN); }
-        case ')': { skip(1); return make_token(LEXER_TOKEN_RPAREN); }
-        case '[': { skip(1); return make_token(LEXER_TOKEN_LBRACKET); }
-        case ']': { skip(1); return make_token(LEXER_TOKEN_RBRACKET); }
-        case '|': { skip(1); return make_token(LEXER_TOKEN_PIPE); }
+        case '/': { skip(1); return make_token(LEXER_TOKEN_DIVIDE);    }
+        case '(': { skip(1); return make_token(LEXER_TOKEN_LPAREN);    }
+        case ')': { skip(1); return make_token(LEXER_TOKEN_RPAREN);    }
+        case '[': { skip(1); return make_token(LEXER_TOKEN_LBRACKET);  }
+        case ']': { skip(1); return make_token(LEXER_TOKEN_RBRACKET);  }
+        case '|': { skip(1); return make_token(LEXER_TOKEN_PIPE);      }
+        case '=': { skip(1); return make_token(LEXER_TOKEN_EQUALS);    }
+        case '$': { skip(1); return make_token(LEXER_TOKEN_DOLLAR);    }
+        case ';': { skip(1); return make_token(LEXER_TOKEN_SEMICOLON); }
         case 'e': { skip(1); return make_number(M_E); }
         case 'p': {
             skip(1);
@@ -271,6 +288,33 @@ next_number() {
 
     /* It frees the temporary buffer */
     free(number);
+
+    return token;
+}
+
+static struct token *
+next_id() {
+    struct token *token;
+    char         *id;
+    unsigned      idlen;
+
+    mark();
+
+    /* It is reading the characters */
+    while (isalpha(peek_char())) skip(1);
+
+    idlen = lexer.pos - lexer.mark + 1; /* id length */
+    id    = (char *)malloc(sizeof(char) * idlen);
+    token = make_token(LEXER_TOKEN_ID);
+
+    /* It checks if the identifier buffer could not be allocated */
+    if (!id)
+        LEXER_ERROR("A temporary buffer for the lexical analysis of an identifier could not be allocated.\n");
+
+    memcpy(id, lexer.buf + lexer.mark, idlen);
+
+    id[idlen - 1]      = '\0';
+    token->metadata.id = id;
 
     return token;
 }
