@@ -292,6 +292,14 @@ next_number() {
     return token;
 }
 
+/**
+ * <b>Implementation Note: </b>
+ * It is the caller's responsiblity to ensure that
+ * the <em>current character</em> in the buffer is
+ * a non-digit.
+ *
+ * @return a token identifier
+ */
 static struct token *
 next_id() {
     struct token *token;
@@ -300,8 +308,8 @@ next_id() {
 
     mark();
 
-    /* It is reading the characters */
-    while (isalpha(peek_char())) skip(1);
+    /* It is reading the characters and digits */
+    while (isalnum(peek_char())) skip(1);
 
     idlen = lexer.pos - lexer.mark + 1; /* id length */
     id    = (char *)malloc(sizeof(char) * idlen);
