@@ -48,6 +48,64 @@ The **mathematical constants** it is always represente by its name. Therefore, t
 
 </div>
 
+## :sparkles: Features
+
+### Constants Support
+This calculator allows the definition of *constants*.
+
+#### Goals
+
+ * Enable the user to break a lengthy expression into a distinct parts providing not only higher semantics for
+   the expression but also higher semantics for each pieece composing the expression.
+   
+ * Remove the concern from the user if the expression is being written correctly since it is hard when it is needed
+   to write everything in one line, mainly, the lengthy ones.
+   
+ * Enable the user to define `factors` to be used along the expressions and changing these factors without the need
+   to transverse the expression searching these numbers.
+   
+#### Description
+
+A constant may be defined as
+
+```python
+$tau = 6.283185307;
+```
+
+Note that **EVERY** constant definition **MUST** start with **$** and end with a **;**. Therefore, that said, we can use the previously
+defined constants in the resulting expression as.
+
+```python
+tau / 2
+```
+the evaluation of the previous expression results in an approximate value of *PI*.
+
+----
+
+### Comments Support
+This calculator allows the insertion of *line comments*.
+
+#### Goals
+
+  * Provide a way to the user to insert an example of the expression result.
+
+  * Enable the user to justify some pieces of the expressions providing a higher semantics about the expression
+    being evaluated.
+    
+  * Enable the user to insert an introduction about the expression or other information valuable to the user.
+
+#### Description
+A line commant may be inserted as
+
+```python
+# This is a line comment!
+# The expression below evaluates to 15.
+10 + 5
+```
+
+Every **LINE COMMENT** starts with **#** and all characters after the **#** that are in the same line are
+considered part of the line comment.
+
 ## :hammer_and_wrench: Compiling
 Once you have arrived in this section, then we are going to show you how to compile the calculator.
 
