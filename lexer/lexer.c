@@ -95,13 +95,14 @@ static struct token *
 next_number();
 
 /**
- * It returns the next identifier identified from
- * the buffer.
+ * It returns the next identifier or math constant
+ * identified from the buffer.
  *
- * @return the next identifier from the buffer
+ * @return the next identifier or math constant
+ *         from the buffer
  */
 static struct token *
-next_id();
+next_id_or_mathconstant();
 
 /**
  * It returns a number token containing the specified
@@ -166,9 +167,10 @@ next_token() {
         return next_number();
 
     /* It checks if the peeked character is a character */
-    /* Therefore, it tries to get the next identifier */
+    /* Therefore, it tries to get the next identifier or */
+    /* a mathematical constant */
     if (isalpha(c))
-        return next_id();
+        return next_id_or_mathconstant();
 
     switch (c) {
         case '+': { skip(1); return make_token(LEXER_TOKEN_PLUS);  }
@@ -190,15 +192,6 @@ next_token() {
         case '=': { skip(1); return make_token(LEXER_TOKEN_EQUALS);    }
         case '$': { skip(1); return make_token(LEXER_TOKEN_DOLLAR);    }
         case ';': { skip(1); return make_token(LEXER_TOKEN_SEMICOLON); }
-        case 'e': { skip(1); return make_number(M_E); }
-        case 'p': {
-            skip(1);
-
-            /* It checks if the input matches the `pi` */
-            if (peek_char() == 'i') { skip(1); return make_number(M_PI); }
-
-            LEXER_ERROR("Unexpected character (%c). It was to be 'pi'?.\n", peek_char());
-        }
         default: LEXER_ERROR("Unexpected character (%c).\n", c);
     }
 }
@@ -283,7 +276,7 @@ next_number() {
  * @return a token identifier
  */
 static struct token *
-next_id() {
+next_id_or_mathconstant() {
     struct token *token;
     char         *id;
     unsigned      idlen;
@@ -295,7 +288,6 @@ next_id() {
 
     idlen = lexer.pos - lexer.mark + 1; /* id length */
     id    = (char *)malloc(sizeof(char) * idlen);
-    token = make_token(LEXER_TOKEN_ID);
 
     /* It checks if the identifier buffer could not be allocated */
     if (!id)
@@ -303,10 +295,18 @@ next_id() {
 
     memcpy(id, lexer.buf + lexer.mark, idlen);
 
-    id[idlen - 1]      = '\0';
-    token->metadata.id = id;
+    id[idlen - 1] = '\0';
 
-    return token;
+    if (0 == strcmp(id, "pi"))
+        return make_number(M_PI);
+    else if (0 == strcmp(id, "e"))
+        return make_number(M_E);
+    else {
+        token = make_token(LEXER_TOKEN_ID);
+        token->metadata.id = id;
+
+        return token;
+    }
 }
 
 static struct token *

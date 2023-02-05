@@ -87,8 +87,13 @@ base();
 /**
  * It parses the following production rule (in BNF-notation).
  *
- *      <factor> ::= number | + number | - number |
- *                  [<expr>] | '|' <expr> '|' | ( <expr> ) | id
+ *      <factor> ::= number         |
+ *                   + number       |
+ *                   - number       |
+ *                   [<expr>]       |
+ *                   '|' <expr> '|' |
+ *                   ( <expr> )     |
+ *                  id
  *
  */
 static double
