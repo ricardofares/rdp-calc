@@ -20,14 +20,26 @@ it is not explicited how the user should choose which one to use and, therefore,
 
 <div align="center">
 
-| Operations | Symbol    | Equivalent Function Name |
-| :---:      | :---:     | :---:                    |
-| Sum        | +         | **X**                    |
-| Subtract   | -         | **X**                    |
-| Multiply   | *         | **X**                    |
-| Divide     | /         | **X**                    |
-| Pow        | **        | **X**                    |
-| Factorial  | []        | **X**                    |
+| Operations  | Symbol    | Equivalent Function Name |
+| :---:       | :---:     | :---:                    |
+| Sum         | +         | **X**                    |
+| Subtract    | -         | **X**                    |
+| Multiply    | *         | **X**                    |
+| Divide      | /         | **X**                    |
+| Pow         | **        | **X**                    |
+| Factorial   | []        | **X**                    |
+| Sine        | **X**     | sin                      |
+| Cossine     | **X**     | cos                      |
+| Tangent     | **X**     | tan                      |
+| Cosecant    | **X**     | csc                      |
+| Secant      | **X**     | sec                      |
+| Cotangent   | **X**     | cot                      |
+| Floor       | **X**     | floor                    |
+| Ceil        | **X**     | ceil                     |
+| Square Root | **X**     | sqrt                     |
+| Cube Root   | **X**     | cbrt                     |
+| Log10       | **X**     | log10                    |
+| Log2        | **X**     | log2                     |
 
 <p align="center"><b>Table 1:</b> Supported mathematical operations showing the respective its symbol or function name.</p>
 <p align="center"><b>X</b>: Indicates absence.</p>
