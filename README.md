@@ -90,7 +90,7 @@ defined constants in the resulting expression as.
 ```python
 tau / 2
 ```
-the evaluation of the previous expression results in an approximate value of *PI*.
+the evaluation of the previous expression results in an approximate value of $\pi$.
 
 ----
 
