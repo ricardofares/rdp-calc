@@ -95,14 +95,14 @@ static struct token *
 next_number();
 
 /**
- * It returns the next identifier or math constant
- * identified from the buffer.
+ * It returns the next identifier, math constant
+ * or the next math function identified from the buffer.
  *
- * @return the next identifier or math constant
- *         from the buffer
+ * @return the next identifier, math constant or
+ *         math function from the buffer
  */
 static struct token *
-next_id_or_mathconstant();
+next_name();
 
 /**
  * It returns a number token containing the specified
@@ -170,7 +170,7 @@ next_token() {
     /* Therefore, it tries to get the next identifier or */
     /* a mathematical constant */
     if (isalpha(c))
-        return next_id_or_mathconstant();
+        return next_name();
 
     switch (c) {
         case '+': { skip(1); return make_token(LEXER_TOKEN_PLUS);  }
@@ -276,7 +276,7 @@ next_number() {
  * @return a token identifier
  */
 static struct token *
-next_id_or_mathconstant() {
+next_name() {
     struct token *token;
     char         *id;
     unsigned      idlen;
@@ -301,6 +301,30 @@ next_id_or_mathconstant() {
         return make_number(M_PI);
     else if (0 == strcmp(id, "e"))
         return make_number(M_E);
+    else if (0 == strcmp(id, "sin"))
+        return make_token(LEXER_TOKEN_FUNCTION_SIN);
+    else if (0 == strcmp(id, "cos"))
+        return make_token(LEXER_TOKEN_FUNCTION_COS);
+    else if (0 == strcmp(id, "tan"))
+        return make_token(LEXER_TOKEN_FUNCTION_TAN);
+    else if (0 == strcmp(id, "csc"))
+        return make_token(LEXER_TOKEN_FUNCTION_CSC);
+    else if (0 == strcmp(id, "sec"))
+        return make_token(LEXER_TOKEN_FUNCTION_SEC);
+    else if (0 == strcmp(id, "cot"))
+        return make_token(LEXER_TOKEN_FUNCTION_COT);
+    else if (0 == strcmp(id, "floor"))
+        return make_token(LEXER_TOKEN_FUNCTION_FLOOR);
+    else if (0 == strcmp(id, "ceil"))
+        return make_token(LEXER_TOKEN_FUNCTION_CEIL);
+    else if (0 == strcmp(id, "sqrt"))
+        return make_token(LEXER_TOKEN_FUNCTION_SQRT);
+    else if (0 == strcmp(id, "cbrt"))
+        return make_token(LEXER_TOKEN_FUNCTION_CBRT);
+    else if (0 == strcmp(id, "log10"))
+        return make_token(LEXER_TOKEN_FUNCTION_LOG10);
+    else if (0 == strcmp(id, "log2"))
+        return make_token(LEXER_TOKEN_FUNCTION_LOG2);
     else {
         token = make_token(LEXER_TOKEN_ID);
         token->metadata.id = id;

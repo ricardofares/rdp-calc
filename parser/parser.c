@@ -87,13 +87,25 @@ base();
 /**
  * It parses the following production rule (in BNF-notation).
  *
- *      <factor> ::= number         |
- *                   + number       |
- *                   - number       |
- *                   [<expr>]       |
- *                   '|' <expr> '|' |
- *                   ( <expr> )     |
- *                  id
+ *      <factor> ::= number          |
+ *                   + number        |
+ *                   - number        |
+ *                   [<expr>]        |
+ *                   '|' <expr> '|'  |
+ *                   ( <expr> )      |
+ *                   id              |
+ *                   sin( <expr> )   |
+ *                   cos( <expr> )   |
+ *                   tan( <expr> )   |
+ *                   csc( <expr> )   |
+ *                   sec( <expr> )   |
+ *                   cot( <expr> )   |
+ *                   floor( <expr> ) |
+ *                   ceil( <expr> )  |
+ *                   sqrt( <expr> )  |
+ *                   cbrt( <expr> )  |
+ *                   log10( <expr> ) |
+ *                   log2( <expr> )  |
  *
  */
 static double
@@ -250,6 +262,78 @@ factor() {
             PARSE_ERROR("Use of undeclared variable %s.\n", id);
 
         return *p;
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_SIN) {  /* sin( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_SIN);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return sin(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_COS) {  /* cos( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_COS);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return cos(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_TAN) {  /* tan( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_TAN);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return tan(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_CSC) {  /* csc( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_CSC);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return 1.0 / sin(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_SEC) {  /* sec( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_SEC);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return 1.0 / cos(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_COT) {  /* cot( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_COT);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return 1.0 / tan(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_FLOOR) {  /* floor( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_FLOOR);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return floor(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_CEIL) {  /* ceil( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_CEIL);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return ceil(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_SQRT) {  /* sqrt( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_SQRT);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return sqrt(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_CBRT) {  /* cbrt( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_CBRT);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return cbrt(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_LOG10) {  /* log10( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_LOG10);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return log10(value);
+    } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_LOG2) {  /* log2( <expr> ) */
+        match(LEXER_TOKEN_FUNCTION_LOG2);
+        match(LEXER_TOKEN_LPAREN);
+        const double value = expr();
+        match(LEXER_TOKEN_RPAREN);
+        return log2(value);
     }
 
     printf("factor: Should not reach here!");
