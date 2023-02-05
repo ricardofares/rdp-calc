@@ -29,7 +29,7 @@ it is not explicited how the user should choose which one to use and, therefore,
 | Pow         | **        | **X**                    |
 | Factorial   | []        | **X**                    |
 | Sine        | **X**     | sin                      |
-| Cossine     | **X**     | cos                      |
+| Cosine     | **X**     | cos                      |
 | Tangent     | **X**     | tan                      |
 | Cosecant    | **X**     | csc                      |
 | Secant      | **X**     | sec                      |
