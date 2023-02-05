@@ -1,0 +1,7 @@
+#
+# This file preresents an example of the
+# mathematical operation `square root`.
+#
+# The following example produces the value sqrt(2).
+#
+2 ** 0.5

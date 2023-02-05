@@ -1,1 +1,7 @@
-50+90
+#
+# This file preresents an example of the
+# mathematical operation `sum`.
+#
+# The following example produces the value 140.
+#
+50 + 90

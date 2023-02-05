@@ -1,0 +1,7 @@
+#
+# This file preresents an example of the
+# mathematical operation `multiply`.
+#
+# The following example produces the value 402.5.
+#
+80.5 * 5
