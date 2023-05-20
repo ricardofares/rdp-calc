@@ -25,6 +25,7 @@
 #define HASHTABLE_H
 
 #include <stddef.h>
+#include "../semantic/semantic.h"
 
 /**
  * A singly-linked hash table node.
@@ -33,9 +34,9 @@
  * as well as the next node in the list.
  */
 struct node {
-    const char  *key;
-    double       value;
-    struct node *next;
+    const char              *key;
+    struct var_descriptor_t  descriptor;
+    struct node             *next;
 };
 
 /**
@@ -89,7 +90,7 @@ hashtable_new(size_t initial_capacity);
  * @param value the value
  */
 void
-hashtable_insert(struct hashtable *ht, const char *key, double value);
+hashtable_insert(struct hashtable *ht, const char *key, struct var_descriptor_t *value);
 
 /**
  * It returns a pointer to the value mapped by key in this hash table.
@@ -103,7 +104,7 @@ hashtable_insert(struct hashtable *ht, const char *key, double value);
  * @return a pointer to the mapped value by the key or NULL if there
  *         is no mapping
  */
-double *
+struct var_descriptor_t *
 hashtable_find(struct hashtable *ht, const char *key);
 
 /**
@@ -116,6 +117,6 @@ hashtable_find(struct hashtable *ht, const char *key);
  * @param placeholder the placeholder
  */
 void
-hashtable_remove(struct hashtable *ht, const char *key, double *placeholder);
+hashtable_remove(struct hashtable *ht, const char *key, struct var_descriptor_t *placeholder);
 
 #endif // HASHTABLE_H

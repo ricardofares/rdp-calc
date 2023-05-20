@@ -192,6 +192,7 @@ next_token() {
         case '=': { skip(1); return make_token(LEXER_TOKEN_EQUALS);    }
         case '$': { skip(1); return make_token(LEXER_TOKEN_DOLLAR);    }
         case ';': { skip(1); return make_token(LEXER_TOKEN_SEMICOLON); }
+        case ':': { skip(1); return make_token(LEXER_TOKEN_COLON); }
         default: LEXER_ERROR("Unexpected character (%c).\n", c);
     }
 }

@@ -108,7 +108,7 @@ hashtable_new(size_t initial_capacity) {
 }
 
 void
-hashtable_insert(struct hashtable *ht, const char *key, double value) {
+hashtable_insert(struct hashtable *ht, const char *key, struct var_descriptor_t *value) {
     struct node *new_node = malloc(sizeof(struct node));
     /* It checks if there is not enough memory to allocate a hash table node */
     if (!new_node) {
@@ -118,33 +118,33 @@ hashtable_insert(struct hashtable *ht, const char *key, double value) {
     if (ht->lf >= 0.75f)
         resize(ht);
     size_t h = hash(ht->capacity, key);
-    new_node->key   = key;
-    new_node->value = value;
-    new_node->next  = ht->table[h];
-    ht->table[h]    = new_node;
+    new_node->key              = key;
+    memcpy(&new_node->descriptor, value, sizeof(struct var_descriptor_t));
+    new_node->next             = ht->table[h];
+    ht->table[h]               = new_node;
     ht->size++;
-    ht->lf          = (float)ht->size / ht->capacity;
+    ht->lf                     = (float)ht->size / ht->capacity;
 }
 
-double *
+struct var_descriptor_t *
 hashtable_find(struct hashtable *ht, const char *key) {
     size_t h          = hash(ht->capacity, key);
     struct node *curr = ht->table[h];
     while (curr) {
         if (0 == strcmp(curr->key, key))
-            return &curr->value;
+            return &curr->descriptor;
         curr = curr->next;
     }
     return NULL;
 }
 
 void
-hashtable_remove(struct hashtable *ht, const char *key, double *placeholder) {
+hashtable_remove(struct hashtable *ht, const char *key, struct var_descriptor_t *placeholder) {
     size_t h          = hash(ht->capacity, key);
     struct node *prev = NULL, *curr = ht->table[h];
     while  (curr) {
         if (0 == strcmp(curr->key, key)) {
-            *placeholder = curr->value;
+            *placeholder = curr->descriptor;
             break;
         }
         prev = curr;

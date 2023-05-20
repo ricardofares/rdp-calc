@@ -138,15 +138,42 @@ void parse() {
 static double
 S() {
     while (TOKEN_TYPE() == LEXER_TOKEN_DOLLAR) {
-        char   *id;
-        double value;
+        char                    *id;
+        double                   value;
+        struct var_descriptor_t *placeholder;
+        struct var_descriptor_t  var_desc;
 
         match(LEXER_TOKEN_DOLLAR);
-        id = TOKEN_ID();
+
+        id          = TOKEN_ID();
+        placeholder = hashtable_find(ht, id);
+
+        // It check if a variable already exists with that id. If so,
+        // then it is checked if the variable is constant. Therefore, if
+        // the variable is constant a parser error occurr since it is not
+        // possible to re-assign a read-only variable.
+        if (placeholder && placeholder->flags & IS_CONSTANT)
+            PARSE_ERROR("Variable `%s` cannot be re-assigned since it is read-only.\n", id);
+
         match(LEXER_TOKEN_ID);
+
+        // It checks if the equals token `=` is preceded by the 
+        // colon token `:`. Such that, we are analyzing a syntax
+        // of `:=`. Therefore, this will indicate that a constant
+        // is being defined instead of a variable.
+        var_desc.flags = 0;
+        if (TOKEN_TYPE() == LEXER_TOKEN_COLON) {
+            match(LEXER_TOKEN_COLON);
+            var_desc.flags = IS_CONSTANT;
+        }
+
         match(LEXER_TOKEN_EQUALS);
-        value = expr();
-        hashtable_insert(ht, id, value);
+
+        value          = expr();
+        var_desc.value = value;
+
+        hashtable_insert(ht, id, &var_desc);
+
         match(LEXER_TOKEN_SEMICOLON);
     }
 
@@ -249,19 +276,19 @@ factor() {
         match(LEXER_TOKEN_PIPE);
         return value;
     } else if (TOKEN_TYPE() == LEXER_TOKEN_ID) {
-        const char *id = TOKEN_ID();
-        double     *p  = NULL;
+        const char              *id = TOKEN_ID();
+        struct var_descriptor_t *placeholder = NULL;
 
         match(LEXER_TOKEN_ID);
 
-        p = hashtable_find(ht, id);
+        placeholder = hashtable_find(ht, id);
 
         /* It checks if there is no mapping to a value */
         /* for the specified identifier */
-        if (!p)
+        if (!placeholder)
             PARSE_ERROR("Use of undeclared variable %s.\n", id);
 
-        return *p;
+        return placeholder->value;
     } else if (TOKEN_TYPE() == LEXER_TOKEN_FUNCTION_SIN) {  /* sin( <expr> ) */
         match(LEXER_TOKEN_FUNCTION_SIN);
         match(LEXER_TOKEN_LPAREN);
